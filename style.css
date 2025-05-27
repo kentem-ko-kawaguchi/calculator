@@ -1,1 +1,66 @@
 @charset "utf-8";
+
+body {
+  background: #eeeeee;
+}
+
+.menu {
+  display: flex;
+  height: 30px;
+}
+
+p {
+  margin: 0;
+}
+
+.menu p {
+  display: flex;
+  align-items: center;
+}
+
+table {
+  width: 100%;
+  table-layout: fixed;
+  text-align: center;
+}
+
+td {
+  padding: 16px;
+  background: white;
+  font-weight: bold;
+}
+
+button {
+  all: unset;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.menu button:not(.history) {
+  margin: 4px;
+}
+
+.history {
+  margin-left: auto;
+}
+
+.result {
+  text-align: right;
+  margin: 0 0 16px 0;
+}
+
+.formula {
+  text-align: right;
+  font-size: 12px;
+  opacity: 0.6;
+  margin-top: 16px;
+}
+
+.menu2 {
+  margin: 0 8px;
+  width: 100%;
+}
+
+.menu2 button {
+  width: calc(100% / 7);
+}
