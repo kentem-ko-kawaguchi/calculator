@@ -1,0 +1,63 @@
+diff a/main.js b/main.js	(rejected hunks)
+@@ -2,47 +2,20 @@
+ 
+ class UIElements {
+   constructor() {
+-    this.menuBtns = [
+-      document.getElementById('menu3'),
+-      document.getElementById('scale'),
+-      document.getElementById('history'),
+-    ];
+-    this.memoryBtns = [
+-      document.getElementById('mc'),
+-      document.getElementById('mr'),
+-      document.getElementById('mPlus'),
+-      document.getElementById('mMinus'),
+-      document.getElementById('ms'),
+-      document.getElementById('mDone'),
+-    ];
+-    this.calcBtns = [
+-      document.getElementById('percent'),
+-      document.getElementById('ce'),
+-      document.getElementById('c'),
+-      document.getElementById('cancel'),
+-      document.getElementById('fraction'),
+-      document.getElementById('square'),
+-      document.getElementById('sqrt'),
+-      document.getElementById('divide'),
+-      document.getElementById('seven'),
+-      document.getElementById('eight'),
+-      document.getElementById('nine'),
+-      document.getElementById('multiply'),
+-      document.getElementById('four'),
+-      document.getElementById('five'),
+-      document.getElementById('six'),
+-      document.getElementById('subtract'),
+-      document.getElementById('one'),
+-      document.getElementById('two'),
+-      document.getElementById('three'),
+-      document.getElementById('add'),
+-      document.getElementById('negative'),
+-      document.getElementById('zero'),
+-      document.getElementById('decimal'),
+-      document.getElementById('equals'),
+-    ];
+-    this.formulaDisplay = document.getElementById("formula");
+-    this.resultDisplay = document.getElementById("result");
++    const get = ids => ids.map(id => document.getElementById(id));
++
++    this.menuBtns = get(['menu3', 'scale', 'history']);
++    this.memoryBtns = get(['mc', 'mr', 'mPlus', 'mMinus', 'ms', 'mDone']);
++    this.calcBtns = get([
++      'percent', 'ce', 'c', 'cancel',
++      'fraction', 'square', 'sqrt', 'divide',
++      'seven', 'eight', 'nine', 'multiply',
++      'four', 'five', 'six', 'subtract',
++      'one', 'two', 'three', 'add',
++      'negative', 'zero', 'decimal', 'equals'
++    ]);
++    this.formulaDisplay = document.getElementById('formula');
++    this.resultDisplay = document.getElementById('result');
+   }
+ }
+ 

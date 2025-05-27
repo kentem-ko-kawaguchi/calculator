@@ -2,45 +2,17 @@
 
 class UIElements {
   constructor() {
-    this.menuBtns = [
-      document.getElementById('menu3'),
-      document.getElementById('scale'),
-      document.getElementById('history'),
-    ];
-    this.memoryBtns = [
-      document.getElementById('mc'),
-      document.getElementById('mr'),
-      document.getElementById('mPlus'),
-      document.getElementById('mMinus'),
-      document.getElementById('ms'),
-      document.getElementById('mDone'),
-    ];
+    this.menuBtns = ['menu3', 'scale', 'history'].map(id => document.getElementById(id));
+    this.memoryBtns = ['mc', 'mr', 'mPlus', 'mMinus', 'ms', 'mDone'].map(id => document.getElementById(id));
+
     this.calcBtns = [
-      document.getElementById('percent'),
-      document.getElementById('ce'),
-      document.getElementById('c'),
-      document.getElementById('cancel'),
-      document.getElementById('fraction'),
-      document.getElementById('square'),
-      document.getElementById('sqrt'),
-      document.getElementById('divide'),
-      document.getElementById('seven'),
-      document.getElementById('eight'),
-      document.getElementById('nine'),
-      document.getElementById('multiply'),
-      document.getElementById('four'),
-      document.getElementById('five'),
-      document.getElementById('six'),
-      document.getElementById('subtract'),
-      document.getElementById('one'),
-      document.getElementById('two'),
-      document.getElementById('three'),
-      document.getElementById('add'),
-      document.getElementById('negative'),
-      document.getElementById('zero'),
-      document.getElementById('decimal'),
-      document.getElementById('equals'),
-    ];
+      'percent', 'ce', 'c', 'cancel',
+      'fraction', 'square', 'sqrt', 'divide',
+      'seven', 'eight', 'nine', 'multiply',
+      'four', 'five', 'six', 'subtract',
+      'one', 'two', 'three', 'add',
+      'negative', 'zero', 'decimal', 'equals'
+    ].map(id => document.getElementById(id));
     this.formulaDisplay = document.getElementById("formula");
     this.resultDisplay = document.getElementById("result");
   }
