@@ -2,20 +2,47 @@
 
 class UIElements {
   constructor() {
-    const get = ids => ids.map(id => document.getElementById(id));
-
-    this.menuBtns = get(['menu3', 'scale', 'history']);
-    this.memoryBtns = get(['mc', 'mr', 'mPlus', 'mMinus', 'ms', 'mDone']);
-    this.calcBtns = get([
-      'percent', 'ce', 'c', 'cancel',
-      'fraction', 'square', 'sqrt', 'divide',
-      'seven', 'eight', 'nine', 'multiply',
-      'four', 'five', 'six', 'subtract',
-      'one', 'two', 'three', 'add',
-      'negative', 'zero', 'decimal', 'equals'
-    ]);
-    this.formulaDisplay = document.getElementById('formula');
-    this.resultDisplay = document.getElementById('result');
+    this.menuBtns = [
+      document.getElementById('menu3'),
+      document.getElementById('scale'),
+      document.getElementById('history'),
+    ];
+    this.memoryBtns = [
+      document.getElementById('mc'),
+      document.getElementById('mr'),
+      document.getElementById('mPlus'),
+      document.getElementById('mMinus'),
+      document.getElementById('ms'),
+      document.getElementById('mDone'),
+    ];
+    this.calcBtns = [
+      document.getElementById('percent'),
+      document.getElementById('ce'),
+      document.getElementById('c'),
+      document.getElementById('cancel'),
+      document.getElementById('fraction'),
+      document.getElementById('square'),
+      document.getElementById('sqrt'),
+      document.getElementById('divide'),
+      document.getElementById('seven'),
+      document.getElementById('eight'),
+      document.getElementById('nine'),
+      document.getElementById('multiply'),
+      document.getElementById('four'),
+      document.getElementById('five'),
+      document.getElementById('six'),
+      document.getElementById('subtract'),
+      document.getElementById('one'),
+      document.getElementById('two'),
+      document.getElementById('three'),
+      document.getElementById('add'),
+      document.getElementById('negative'),
+      document.getElementById('zero'),
+      document.getElementById('decimal'),
+      document.getElementById('equals'),
+    ];
+    this.formulaDisplay = document.getElementById("formula");
+    this.resultDisplay = document.getElementById("result");
   }
 }
 
@@ -30,81 +57,91 @@ class CalculatorLogic {
   }
 
   handleButton(btn) {
-    const id = btn.id;
-
     if (this.calc[0] === 0) this.calc.pop();
 
-    if (id === 'equals') {
+    const id = btn.id;
+
+    if (id === "equals") {
       try {
-        this.clearCalcNumber('=');
+        this.clearCalcNumber("=");
         this.calc = [this.answer];
         this.ansflag = true;
-        this.calculate(false);
-      } catch {
-        this.ui.resultDisplay.textContent = 'Error';
+        this.calculation(false);
+      } catch (e) {
+        this.ui.resultDisplay.textContent = "Error";
       }
       return;
     }
 
-    if (id === 'c') {
-      this.reset();
+    if (id === "c") {
+      this.ansflag = false;
+      this.calc = [0];
+      this.calcNumber = [];
+      this.clear();
+      this.ui.resultDisplay.textContent = 0;
     } else {
       this.updateFormula(btn.textContent);
     }
   }
 
-  reset() {
-    this.calc = [0];
-    this.calcNumber = [];
-    this.ansflag = false;
-    this.ui.formulaDisplay.textContent = this.calc.join('');
-    this.ui.resultDisplay.textContent = 0;
+  clear() {
+    this.ui.formulaDisplay.textContent = this.calc.join("");
   }
 
   updateFormula(value) {
     if (!isNaN(value)) {
-      if (this.ansflag) this.reset();
-      this.appendNumber(value);
+      if (this.ansflag) {
+        this.calc = [];
+        this.calcNumber = [];
+        this.ansflag = false;
+      }
+      this.updateCalcNumber(value);
     } else {
       this.ansflag = false;
       this.clearCalcNumber(value);
     }
   }
 
-  appendNumber(number) {
+  updateCalcNumber(number) {
     this.calc.push(number);
     this.calcNumber.push(number);
-    this.expression = this.calcNumber.join('');
+    this.calculation(true);
+    this.expression = this.calcNumber.join("");
     this.ui.resultDisplay.textContent = this.expression;
-    this.calculate(true);
   }
 
   clearCalcNumber(value) {
     this.calc.push(value);
     this.calcNumber = [];
-    this.ui.formulaDisplay.textContent = this.calc.join('');
+    this.ui.formulaDisplay.textContent = this.calc.join("");
   }
 
-  calculate(updateFormula) {
-    this.expression = this.calc.join('');
+  calculation(updateFormulaFlag) {
+    this.expression = this.calc.join("");
     try {
       this.answer = Function(`"use strict"; return (${this.expression})`)();
       this.ui.resultDisplay.textContent = this.answer;
-      if (updateFormula) this.ui.formulaDisplay.textContent = this.expression;
+      if (updateFormulaFlag) {
+        this.ui.formulaDisplay.textContent = this.expression;
+      }
     } catch {
-      this.ui.resultDisplay.textContent = 'Error';
+      this.ui.resultDisplay.textContent = "Error";
     }
   }
 }
 
 class CalculatorApp {
   constructor() {
-    const ui = new UIElements();
-    const logic = new CalculatorLogic(ui);
-    [...ui.menuBtns, ...ui.memoryBtns, ...ui.calcBtns].forEach(btn =>
-      btn.addEventListener('click', () => logic.handleButton(btn))
-    );
+    this.ui = new UIElements();
+    this.logic = new CalculatorLogic(this.ui);
+  }
+
+  init() {
+    [...this.ui.menuBtns, ...this.ui.memoryBtns, ...this.ui.calcBtns].forEach(btn => {
+      btn.addEventListener('click', () => this.logic.handleButton(btn));
+    });
   }
 }
 
-new CalculatorApp();
+const app = new CalculatorApp();
+app.init();
