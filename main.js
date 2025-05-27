@@ -1,132 +1,147 @@
 'use strict';
-{
-  const nemuBtns = [
-    document.getElementById('menu3'),
-    document.getElementById('scale'),
-    document.getElementById('history'),
-  ]
-  const nemu2Btns = [
-    document.getElementById('mc'),
-    document.getElementById('mr'),
-    document.getElementById('mPlus'),
-    document.getElementById('mMinus'),
-    document.getElementById('ms'),
-    document.getElementById('mDone'),
-  ]
 
-  const tds = [
-    document.getElementById('percent'),
-    document.getElementById('ce'),
-    document.getElementById('c'),
-    document.getElementById('cancel'),
-    document.getElementById('fraction'),
-    document.getElementById('square'),
-    document.getElementById('sqrt'),
-    document.getElementById('divide'),
-    document.getElementById('seven'),
-    document.getElementById('eight'),
-    document.getElementById('nine'),
-    document.getElementById('multiply'),
-    document.getElementById('four'),
-    document.getElementById('five'),
-    document.getElementById('six'),
-    document.getElementById('subtract'),
-    document.getElementById('one'),
-    document.getElementById('two'),
-    document.getElementById('three'),
-    document.getElementById('add'),
-    document.getElementById('negative'),
-    document.getElementById('zero'),
-    document.getElementById('decimal'),
-    document.getElementById('equals'),
-  ];
-
-  nemuBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      checkBtn(btn);
-    });
-  });
-  nemu2Btns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      checkBtn(btn);
-    });
-  });
-
-  tds.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      checkBtn(btn);
-    });
-  });
-
-  const formula = document.getElementById("formula");
-  const result = document.getElementById("result");
-  let calc = [];
-  let calcNumber = [];
-  let expression;
-  let answer;
-  let ansflag = false;
-
-  function checkBtn(btn) {
-    if (calc[0] === 0) {
-      calc.pop();
-    }
-    if (btn.id === "equals") {
-      try {
-        clearCalcNumber("=");
-        calc = [answer];
-        ansflag = true;
-        calculation(false);
-
-      } catch (e) {
-        result.textContent = "Error";
-      }
-      return;
-    } else if (btn.id === "c") {
-      ansflag = false;
-      calc = [0];
-      clear();
-    } else {
-      updateFormula(btn.textContent);
-    }
-  }
-  
-  function clear() {
-    formula.textContent = calc.join("");
-  }
-  
-  function updateFormula(object) {
-    if (!isNaN(object) && !ansflag) {
-      updateCalcNumber(object);
-    } else if (!isNaN(object) && ansflag) {
-      calc = [];
-      ansflag = false;
-      updateCalcNumber(object);
-    }
-    else {
-      ansflag = false;
-      clearCalcNumber(object);
-    }
-  }
-
-  function updateCalcNumber(number) {
-    calc.push(number);
-    calcNumber.push(number);
-    calculation(true);
-    expression = calcNumber.join("");
-    result.textContent = expression;
-  }
-
-  function clearCalcNumber(object) {
-    calc.push(object);
-    calcNumber = [];
-    formula.textContent = calc.join("");
-  }
-
-  function calculation(ans) {
-    expression = calc.join("");
-    answer = Function(`return ${expression}`)();
-    result.textContent = answer;
-    if (ans)
-      formula.textContent = expression;
+class UIElements {
+  constructor() {
+    this.menuBtns = [
+      document.getElementById('menu3'),
+      document.getElementById('scale'),
+      document.getElementById('history'),
+    ];
+    this.memoryBtns = [
+      document.getElementById('mc'),
+      document.getElementById('mr'),
+      document.getElementById('mPlus'),
+      document.getElementById('mMinus'),
+      document.getElementById('ms'),
+      document.getElementById('mDone'),
+    ];
+    this.calcBtns = [
+      document.getElementById('percent'),
+      document.getElementById('ce'),
+      document.getElementById('c'),
+      document.getElementById('cancel'),
+      document.getElementById('fraction'),
+      document.getElementById('square'),
+      document.getElementById('sqrt'),
+      document.getElementById('divide'),
+      document.getElementById('seven'),
+      document.getElementById('eight'),
+      document.getElementById('nine'),
+      document.getElementById('multiply'),
+      document.getElementById('four'),
+      document.getElementById('five'),
+      document.getElementById('six'),
+      document.getElementById('subtract'),
+      document.getElementById('one'),
+      document.getElementById('two'),
+      document.getElementById('three'),
+      document.getElementById('add'),
+      document.getElementById('negative'),
+      document.getElementById('zero'),
+      document.getElementById('decimal'),
+      document.getElementById('equals'),
+    ];
+    this.formulaDisplay = document.getElementById("formula");
+    this.resultDisplay = document.getElementById("result");
   }
 }
+
+class CalculatorLogic {
+  constructor(ui) {
+    this.ui = ui;
+    this.calc = [];
+    this.calcNumber = [];
+    this.expression = "";
+    this.answer = 0;
+    this.ansflag = false;
+  }
+
+  handleButton(btn) {
+    if (this.calc[0] === 0) this.calc.pop();
+
+    const id = btn.id;
+
+    if (id === "equals") {
+      try {
+        this.clearCalcNumber("=");
+        this.calc = [this.answer];
+        this.ansflag = true;
+        this.calculation(false);
+      } catch (e) {
+        this.ui.resultDisplay.textContent = "Error";
+      }
+      return;
+    }
+
+    if (id === "c") {
+      this.ansflag = false;
+      this.calc = [0];
+      this.calcNumber = [];
+      this.clear();
+      this.ui.resultDisplay.textContent = 0;
+    } else {
+      this.updateFormula(btn.textContent);
+    }
+  }
+
+  clear() {
+    this.ui.formulaDisplay.textContent = this.calc.join("");
+  }
+
+  updateFormula(value) {
+    if (!isNaN(value)) {
+      if (this.ansflag) {
+        this.calc = [];
+        this.calcNumber = [];
+        this.ansflag = false;
+      }
+      this.updateCalcNumber(value);
+    } else {
+      this.ansflag = false;
+      this.clearCalcNumber(value);
+    }
+  }
+
+  updateCalcNumber(number) {
+    this.calc.push(number);
+    this.calcNumber.push(number);
+    this.calculation(true);
+    this.expression = this.calcNumber.join("");
+    this.ui.resultDisplay.textContent = this.expression;
+  }
+
+  clearCalcNumber(value) {
+    this.calc.push(value);
+    this.calcNumber = [];
+    this.ui.formulaDisplay.textContent = this.calc.join("");
+  }
+
+  calculation(updateFormulaFlag) {
+    this.expression = this.calc.join("");
+    try {
+      this.answer = Function(`"use strict"; return (${this.expression})`)();
+      this.ui.resultDisplay.textContent = this.answer;
+      if (updateFormulaFlag) {
+        this.ui.formulaDisplay.textContent = this.expression;
+      }
+    } catch {
+      this.ui.resultDisplay.textContent = "Error";
+    }
+  }
+}
+
+class CalculatorApp {
+  constructor() {
+    this.ui = new UIElements();
+    this.logic = new CalculatorLogic(this.ui);
+  }
+
+  init() {
+    [...this.ui.menuBtns, ...this.ui.memoryBtns, ...this.ui.calcBtns].forEach(btn => {
+      btn.addEventListener('click', () => this.logic.handleButton(btn));
+    });
+  }
+}
+
+const app = new CalculatorApp();
+app.init();
