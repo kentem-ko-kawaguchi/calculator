@@ -28,12 +28,29 @@ td {
   padding: 16px;
   background: white;
   font-weight: bold;
+  cursor: pointer;
+}
+
+td:hover{
+  opacity: 0.6;
+}
+
+td:active{
+  opacity: 0.4;
 }
 
 button {
   all: unset;
   cursor: pointer;
   display: inline-block;
+}
+
+button:hover{
+  opacity: 0.6;
+}
+
+button:active{
+  opacity: 0.4;
 }
 
 .menu button:not(.history) {
